@@ -1,4 +1,4 @@
-#Остановился на уроке 17
+#Остановился на уроке 18
 from tkinter import *
 from tkinter import messagebox
 import time
@@ -7,8 +7,8 @@ import random
 tk = Tk()
 app_running = True
 
-size_canvas_x = 600
-size_canvas_y = 600
+size_canvas_x = 500
+size_canvas_y = 500
 s_x = s_y = 8  # размер игрового поля
 s_y = 8
 step_x = size_canvas_x // s_x  # шаг по горизонтали
@@ -32,10 +32,12 @@ ships_list = []#список кораблей игрока 1 и 2
 hod_igrovoe_pole_1 = False # ход игрока 1 если true и 2 если false
 computer_vs_human = True # переменная опр. против кого играем!  если True-против компа, false - человека
 if computer_vs_human:
-    add_to_label = " (Компьютер)"
+    add_to_label = " (Компьютер) "
+    add_to_label2 = " (Думает,или прицеливается) "
     hod_igrovoe_pole_1 = False
 else:
     add_to_label = ""
+    add_to_label2 = ""
     hod_igrovoe_pole_1 = False
 
 # print(enemy_ships1)
@@ -89,16 +91,47 @@ t3 = Label(tk, text="*****", font=("helvetica", 16))
 t3.place(x = size_canvas_x + menu_x//2 - t3.winfo_reqwidth() // 2, y = size_canvas_y)
 
 
+def change_rb():
+    global computer_vs_human, add_to_label, add_to_label2
+    print(rb_var.get())
+    if rb_var.get():
+        computer_vs_human = True
+        add_to_label = " (Компьютер) "
+        add_to_label2 = " (Думает,или прицеливается) "
+    else:
+        computer_vs_human = False
+        add_to_label = ""
+        add_to_label2 = ""
+
+
+
+
+rb_var = BooleanVar()
+rb1 = Radiobutton(tk, text="Чечик vs Комп", variable=rb_var, value=1, command=change_rb)
+rb2 = Radiobutton(tk, text="Чечик vs Чечик", variable=rb_var, value=0, command=change_rb)
+rb1.place(x=size_canvas_x+20, y = 140)
+rb2.place(x=size_canvas_x+20, y = 160)
+if computer_vs_human:
+    rb1.select()
+
 
 def mark_igrok(igrok_mark_1):
     if igrok_mark_1:
-        t0.configure(bg='red') 
+        t0.configure(bg='red')
+        t0.configure(text='ход игрока № 1'+ add_to_label2) 
+        t0.place(x = size_canvas_x//2 - t0.winfo_reqwidth() // 2, y = size_canvas_y+3) 
         t1.configure(bg='#f0f0f0') 
+        t1.configure(text='ход игрока № 2'+ add_to_label) 
+        t1.place(x = size_canvas_x + menu_x + size_canvas_x// 2 - t1.winfo_reqwidth() // 2, y= size_canvas_y + 3)
         t3.configure(text='ход игрока № 2'+ add_to_label)
         t3.place(x = size_canvas_x + menu_x//2 - t3.winfo_reqwidth() // 2, y = size_canvas_y)        
     else:
         t1.configure(bg='red')
         t0.configure(bg='#f0f0f0')
+        t0.configure(text='ход игрока № 1')
+        t0.place(x = size_canvas_x//2 - t0.winfo_reqwidth() // 2, y = size_canvas_y+3)
+        t1.configure(text='ход игрока № 2'+ add_to_label)
+        t1.place(x = size_canvas_x + menu_x + size_canvas_x// 2 - t1.winfo_reqwidth() // 2, y= size_canvas_y + 3)
         t3.configure(text='ход игрока № 1')
         t3.place(x = size_canvas_x + menu_x//2 - t3.winfo_reqwidth() // 2, y = size_canvas_y)
 mark_igrok(hod_igrovoe_pole_1) 
